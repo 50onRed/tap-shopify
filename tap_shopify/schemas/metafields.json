@@ -60,6 +60,7 @@
         "null",
         "integer",
         "object",
+        "array",
         "string"
       ],
       "properties": {}
