@@ -63,7 +63,8 @@
         "array",
         "string"
       ],
-      "properties": {}
+      "properties": {},
+      "items": []
     },
     "updated_at": {
       "type": [
