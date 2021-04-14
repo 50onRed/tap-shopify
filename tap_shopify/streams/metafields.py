@@ -26,6 +26,11 @@ def get_metafields(parent_object, since_id):
 class Metafields(Stream):
     name = 'metafields'
     replication_object = shopify.Metafield
+    should_enforce_value_is_json = None
+
+    def __init__(self, *args, **kwargs):
+        super(*args, **kwargs)
+        self.should_enforce_value_is_json = Context.config.get('metafields_value_should_enforce_json', False)
 
     def get_objects(self):
         # Get top-level shop metafields
@@ -65,6 +70,9 @@ class Metafields(Stream):
                 except json.decoder.JSONDecodeError:
                     LOGGER.info("Failed to decode JSON value for metafield %s", metafield.get('id'))
                     metafield["value"] = value
+            elif self.should_enforce_value_is_json and value_type and value_type == "string":
+                value = metafield.get("value")
+                metafield["value"] = json.dumps(value) if value is not None else value
 
             yield metafield
 
